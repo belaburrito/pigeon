@@ -27,18 +27,6 @@ export function SignIn() {
 
     return (
         <div id="signUp">
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
             <button onClick={handleSignIn}>Sign In</button>
             <button onClick={handleSignInGoogle}>Sign In with Google</button>
             <button onClick={handleSignUpButtonClick}>Sign Up</button>

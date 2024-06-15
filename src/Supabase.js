@@ -197,3 +197,11 @@ export async function signOut() {
         console.log('Signed out successfully');
     }
 }
+
+export async function getPublicUrl(path) {
+    const { data } = await supabase
+        .storage
+        .from('pigeons/cards')
+        .getPublicUrl(path)
+    return data
+}

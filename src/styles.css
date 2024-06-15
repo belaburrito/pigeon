@@ -23,14 +23,15 @@ h1{
 .pigeon {
     border: solid 2px white;
     border-radius: 25px;
-    width: 250px;
-    height: 300px;
+    width: 300px;
+    /* height: 300px; */
     padding: 25px;
 }
 .nav-container nav{
     display: flex;
     gap: 20px;
     margin-bottom: 50px;
+    justify-content: center;
 }
 .nav-container nav a, .nav-container nav a:visited{
     border: solid 2px #ad0e0e;

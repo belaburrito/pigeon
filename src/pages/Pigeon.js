@@ -1,4 +1,4 @@
-import { getUser, getCoordinates } from '../Supabase';
+import { getUser, getCoordinates, getPublicUrl } from '../Supabase';
 import {useSession} from '../SessionContext';
 import React, { useContext, useEffect, useState } from 'react';
 import {PigeonContext} from '../PigeonContext';
@@ -36,7 +36,7 @@ export function Pigeon({params}){
             }
         }
         if (foundPigeon) {
-            fetchCoordinates()
+            fetchCoordinates();
         };
     }, [pigeons, params.id]);
 
@@ -44,12 +44,14 @@ export function Pigeon({params}){
         return <div>Loading...</div>;
     }
 
+
     return (
         <div>
             <h1>{pigeon.name}</h1>
-            <p>{pigeon.id}</p>
             <p>{pigeon.description}</p>
-            <p>{session && session.user.role === 'admin_user' && (coordinates)}</p>
+            {session && session.user.role === 'admin_user' && coordinates && (
+                <p>Coordinates: {coordinates}, UUID: {pigeon.uuid}</p>
+            )}
             {hasPigeon && <p>You've collected this pigeon</p>}
         </div>
     );

@@ -70,8 +70,7 @@ export const Found = ({ params }) => {
             setLoading(false);
         }
     };
-
-    const foundPigeon = pigeons.find(pigeon => pigeon.id.toString() === pigeonId);
+    const foundPigeon = pigeons.find(pigeon => pigeon.uuid.toString() === pigeonId);
     console.log(foundPigeon)
 
     useEffect(() => {
@@ -94,7 +93,7 @@ export const Found = ({ params }) => {
                     if (session) {
                         console.log('logged in');
                         getSignedInProfile().then((profile) => {
-                            updatePigeonsToProfile(profile[0].id, [foundPigeon]);
+                            updatePigeonsToProfile(profile[0].uuid, [foundPigeon]);
                         });
                     }
                 }
