@@ -13,7 +13,7 @@ export const Nav = () => {
         });
     };
     const handleSignOut = () => {
-        response = signOut().then((response) => {
+        response = signOut().then(() => {
             setLocation('/');
         });
     };

@@ -183,13 +183,17 @@ export async function signInUser(email, password) {
 }
 
 export async function signInGoogle() {
+    const redirectUri = process.env.REDIRECT_URI || 'https://google.com';
+    console.log(redirectUri)
     supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+          redirectTo: redirectUri
+        }
       })      
 }
 
 export async function signOut() {
-    console.log('signing out')
     const { error } = await supabase.auth.signOut()
     if (error) {
         console.log('Error signing out: ', error.message);
