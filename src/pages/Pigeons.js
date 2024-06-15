@@ -20,7 +20,7 @@ export const PigeonCard = ({ pigeon }) => {
     };
     return (
         <div key={pigeon.id} className="pigeon" onClick={navigateToPigeon}>
-            <img src={pigeonUrl} alt={pigeon.name} width="300px"/>
+            <img src={pigeonUrl} alt={pigeon.name} width="600px"/>
         </div>
     );
 };
