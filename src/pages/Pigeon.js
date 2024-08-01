@@ -1,28 +1,11 @@
-import { getUser, getCoordinates, getPublicUrl } from '../Supabase';
+import {getCoordinates, getPigeonsFromProfile } from '../Supabase';
 import {useSession} from '../SessionContext';
 import React, { useContext, useEffect, useState } from 'react';
 import {PigeonContext} from '../PigeonContext';
 
 export function Pigeon({params}){
     const session = useSession();
-    const [hasPigeon, setHasPigeon] = useState(false);
     const [coordinates, setCoordinates] = useState('');
-
-
-    // if (session) {
-    //     console.log('logged in');
-    //     getSignedInProfile().then((profile) => {
-    //         pigeonData = profile[0].pigeons;
-    //         pigeonData.forEach(pigeon => {
-    //             if(pigeon.id == params.id) {
-    //                 setHasPigeon(true);
-    //             }
-    //         })
-    //     });
-    // }
-    // else{
-    //     console.log('not logged in');
-    // }
 
     const { pigeons } = useContext(PigeonContext);
     const [pigeon, setPigeon] = useState(null);
@@ -40,19 +23,37 @@ export function Pigeon({params}){
         };
     }, [pigeons, params.id]);
 
+    const [userPigeons, setUserPigeons] = useState([]);
+    // TODO: Make this re-useable for pigeons.js and pigeon.js
+    useEffect(() => {
+        const fetchUserPigeons = async () => {
+            const data = await getPigeonsFromProfile();
+            const uuids = data.flatMap(item => 
+                item.pigeons.map(pigeon => pigeon.uuid)
+            );
+            setUserPigeons(uuids);
+        };
+        fetchUserPigeons();
+    }, []);
+
     if (!pigeon) {
         return <div>Loading...</div>;
     }
 
+    const pigeonExistsInUserData = userPigeons.includes(pigeon.uuid);
 
     return (
         <div>
             <h1>{pigeon.name}</h1>
-            <p>{pigeon.description}</p>
+            {pigeonExistsInUserData && (
+                <p>{pigeon.description}</p>
+            )}
+            {!pigeonExistsInUserData && (
+                <p>Hmm, you haven't found this pigeon yet. Go exploring to catch it!</p>
+            )}
             {session && session.user.role === 'admin_user' && coordinates && (
                 <p>Coordinates: {coordinates}, UUID: {pigeon.uuid}</p>
             )}
-            {hasPigeon && <p>You've collected this pigeon</p>}
         </div>
     );
 }
