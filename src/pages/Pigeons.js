@@ -8,6 +8,7 @@ import { useState } from "react";
 export const PigeonCard = ({ pigeon, userPigeons }) => {
     const [, setLocation] = useLocation();
     const [pigeonUrl, setPigeonUrl] = useState('');
+    // TODO: If logged out, check local storage for pigeon data
     const pigeonExistsInUserData = userPigeons.includes(pigeon.uuid);
 
     if (pigeonExistsInUserData) {

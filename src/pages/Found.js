@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PigeonContext } from '../PigeonContext';
-import { VerifyLocation } from '../Supabase';
+import { VerifyLocation, getPublicUrl } from '../Supabase';
 import { useLocation } from 'wouter';
 import { getSignedInProfile, updatePigeonsToProfile } from '../Supabase';
 import Modal from '../Modal';
@@ -107,12 +107,23 @@ export const Found = ({ params }) => {
         }
     }, [userLocation, foundPigeon, setLocation]);
 
+    // TODO: Make reusable for found.js and pigeons.js
+    const [pigeonUrl, setPigeonUrl] = useState('');
+    useEffect(() => {
+        if (foundPigeon) {
+            getPublicUrl(foundPigeon.name + ".png").then((url) => {
+                setPigeonUrl(url.publicUrl);
+            });
+        }
+    }, [foundPigeon]);
+
     return (
         <div>
             {success ? (
                 <div>
                     <h1>Success!</h1>
                     <p>You found <b>{foundPigeon.name}</b>!</p>
+                    <div class="pigeon"><img src={pigeonUrl} alt={foundPigeon.name} width="600" /></div>
                     <p>Keep exploring to collect them all!</p>
                     {!session && <button onClick={() => setLocation('/signin')}>Sign in or Sign Up</button>}
                 </div>
