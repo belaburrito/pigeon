@@ -93,7 +93,7 @@ export const Found = ({ params }) => {
                     if (session) {
                         console.log('logged in');
                         getSignedInProfile().then((profile) => {
-                            updatePigeonsToProfile(profile[0].uuid, [foundPigeon]);
+                            updatePigeonsToProfile(profile[0].id, [foundPigeon]);
                         });
                     }
                 }
