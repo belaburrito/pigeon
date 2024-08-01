@@ -19,6 +19,32 @@ export async function getSignedInProfile() {
     return data
 }
 
+export async function getPigeonsFromProfile() {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('pigeons')
+
+    if (error) {
+        console.log('Error fetching pigeons: ', error);
+    }
+
+    return data
+}
+
+// TODO: postgresql query for json
+export async function isPigeonInProfile(pigeonUuid) {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('pigeons')
+        .or(`pigeons -> '[{"uuid": "${pigeonUuid}"}]'::jsonb`);
+
+    if (error) {
+        console.log('Error fetching profiles: ', error);
+    }
+
+    return data
+}
+
 export async function getUser() {
     try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -43,6 +69,7 @@ export async function GetPigeons() {
 }
 
 export async function updatePigeonsToProfile(profileId, newPigeons) {
+    console.log('profileId', profileId);
     supabase
     .from('profiles')
     .select('pigeons')
