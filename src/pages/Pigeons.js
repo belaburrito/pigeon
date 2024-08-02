@@ -3,6 +3,7 @@ import { PigeonContext } from  "../PigeonContext";
 import { useContext, useEffect } from 'react';
 import { getPublicUrl, getPigeonsFromProfile, getLocalStoragePigeons } from "../Supabase";
 import { useState } from "react";
+import { useSession } from "../SessionContext";
 
 export const PigeonCard = ({ pigeon, userPigeons }) => {
     const [loaded, setLoaded] = useState(false);
@@ -49,6 +50,7 @@ export const PigeonCard = ({ pigeon, userPigeons }) => {
 export function Pigeons() {
     const { pigeons } = useContext(PigeonContext);
     const [userPigeons, setUserPigeons] = useState([]);
+    const session = useSession();
     useEffect(() => {
         // Fetch user pigeon data once
         const fetchUserPigeons = async () => {
@@ -64,10 +66,26 @@ export function Pigeons() {
         fetchUserPigeons();
     }, []);
     return (
-        <div className="pigeon-container">
-            {pigeons.map(pigeon => (
-                <PigeonCard key={pigeon.id} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
-            ))}
+        <div className="pigeons">
+            {session && (
+                <h1>You've collected {userPigeons.length} Pigeons out of 50.</h1>
+            )}
+            {/* {userPigeons.length === 0 && (
+                <div>
+                    <p><a href="/found/879f0d83-2c4f-4a2c-955b-e6a17a344e3c">Click to collect your first Pigeon...</a></p>
+                            <img
+                                src="https://zfuzqbjeufxqlsjsjlhu.supabase.co/storage/v1/object/public/pigeons/cards/Conspiracy%20Pigeon.png"
+                                alt="Conspiracy Pigeon"
+                                width="600px"
+                            />
+                </div>
+            )} */}
+            <div className="pigeon-container">
+                {pigeons.map(pigeon => (
+                    <PigeonCard key={pigeon.id} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
+                ))}
+
+            </div>
         </div>
     );
 }
