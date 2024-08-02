@@ -105,3 +105,13 @@ input {
 textarea{
     color: black;
 }
+
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+  
+.fade-in.loaded {
+    opacity: 1;
+}
+  

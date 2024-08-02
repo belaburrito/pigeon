@@ -4,28 +4,40 @@ import { useContext, useEffect } from 'react';
 import { getPublicUrl, getPigeonsFromProfile } from "../Supabase";
 import { useState } from "react";
 
-
 export const PigeonCard = ({ pigeon, userPigeons }) => {
+    const [loaded, setLoaded] = useState(false);
     const [, setLocation] = useLocation();
     const [pigeonUrl, setPigeonUrl] = useState('');
     // TODO: If logged out, check local storage for pigeon data
-    const pigeonExistsInUserData = userPigeons.includes(pigeon.uuid);
-
-    if (pigeonExistsInUserData) {
-        getPublicUrl(pigeon.name + ".png").then((url) => {
-            setPigeonUrl(url.publicUrl);
-        });
-    }
+    useEffect(() => {
+        const fetchPigeonUrl = async () => {
+            if (userPigeons.includes(pigeon.uuid)) {
+                const url = await getPublicUrl(pigeon.name + ".png");
+                setPigeonUrl(url.publicUrl);
+            }
+        };
+        fetchPigeonUrl();
+    }, [pigeon.uuid, pigeon.name, userPigeons]);
 
     const navigateToPigeon = () => {
         setLocation(`/pigeons/${pigeon.id}`);
     };
+
+    const handleImageLoad = () => {
+        setLoaded(true);
+    };
+
     return (
         <div key={pigeon.id} className="pigeon" onClick={navigateToPigeon}>
-            {pigeonExistsInUserData && (
-                <img src={pigeonUrl} alt={pigeon.name} width="600px"/>
-            )}
-            {!pigeonExistsInUserData && (
+            {pigeonUrl ? (
+                <img
+                    src={pigeonUrl}
+                    alt={pigeon.name}
+                    width="600px"
+                    className={`fade-in ${loaded ? 'loaded' : ''}`}
+                    onLoad={handleImageLoad}
+                />
+            ) : (
                 <h1>{pigeon.name}</h1>
             )}
         </div>
