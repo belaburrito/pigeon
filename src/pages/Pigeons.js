@@ -47,6 +47,7 @@ export const PigeonCard = ({ pigeon, userPigeons }) => {
     );
 };
 
+// TODO: If !session and !localPigeons, or session and !userPigeons, show a section to collect a starter pigeon
 export function Pigeons() {
     const { pigeons } = useContext(PigeonContext);
     const [userPigeons, setUserPigeons] = useState([]);
