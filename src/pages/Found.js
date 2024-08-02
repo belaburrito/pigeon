@@ -79,10 +79,9 @@ export const Found = ({ params }) => {
             console.log(userLocation.lng);
             setLoading(true);
             VerifyLocation(userLocation.lat, userLocation.lng).then(res => {
-                console.log(res[0].name);
                 // || (res && res[0].name !== foundPigeon.name)
                 // Above condition is to ensure that the coordinate matches the found pigeon, and not just any pigeon
-                if (!res || (res && res[0].name !== foundPigeon.name)) {
+                if (!res || (res && res[0]?.name !== foundPigeon.name)) {
                     setLocation('/toofar');
                 } else {
                     console.log('Location verified!');
