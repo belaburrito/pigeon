@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {useSession} from './SessionContext';
 import { Home, Admin, Pigeons, Pigeon, Found, TooFar, SignUp } from './pages';
 import { Route, Link, useLocation } from 'wouter';

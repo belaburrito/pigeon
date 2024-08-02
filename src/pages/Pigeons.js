@@ -1,17 +1,19 @@
 import { useLocation } from "wouter";
 import { PigeonContext } from  "../PigeonContext";
 import { useContext, useEffect } from 'react';
-import { getPublicUrl, getPigeonsFromProfile } from "../Supabase";
+import { getPublicUrl, getPigeonsFromProfile, getLocalStoragePigeons } from "../Supabase";
 import { useState } from "react";
 
 export const PigeonCard = ({ pigeon, userPigeons }) => {
     const [loaded, setLoaded] = useState(false);
     const [, setLocation] = useLocation();
     const [pigeonUrl, setPigeonUrl] = useState('');
-    // TODO: If logged out, check local storage for pigeon data
+    const localPigeons = getLocalStoragePigeons();
+    // TODO: Only check localPigeons if user is not logged in.
+    // I'm keeping it as is because otherwise a user may collect a pigeon, log in, and it won't appear to be collected.
     useEffect(() => {
         const fetchPigeonUrl = async () => {
-            if (userPigeons.includes(pigeon.uuid)) {
+            if (userPigeons.includes(pigeon.uuid) || localPigeons.some(localPigeon => localPigeon.uuid === pigeon.uuid)) {   
                 const url = await getPublicUrl(pigeon.name + ".png");
                 setPigeonUrl(url.publicUrl);
             }
@@ -51,6 +53,9 @@ export function Pigeons() {
         // Fetch user pigeon data once
         const fetchUserPigeons = async () => {
             const data = await getPigeonsFromProfile();
+            if (data[0] === null || data[0]?.pigeons === null) {
+                return;
+            }
             const uuids = data.flatMap(item => 
                 item.pigeons.map(pigeon => pigeon.uuid)
             );

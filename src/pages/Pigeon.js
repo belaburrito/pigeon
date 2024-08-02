@@ -1,4 +1,4 @@
-import {getCoordinates, getPigeonsFromProfile } from '../Supabase';
+import {getCoordinates, getPigeonsFromProfile, getLocalStoragePigeons } from '../Supabase';
 import {useSession} from '../SessionContext';
 import React, { useContext, useEffect, useState } from 'react';
 import {PigeonContext} from '../PigeonContext';
@@ -28,6 +28,9 @@ export function Pigeon({params}){
     useEffect(() => {
         const fetchUserPigeons = async () => {
             const data = await getPigeonsFromProfile();
+            if (data[0]?.pigeons === null) {
+                return;
+            }
             const uuids = data.flatMap(item => 
                 item.pigeons.map(pigeon => pigeon.uuid)
             );
@@ -40,7 +43,10 @@ export function Pigeon({params}){
         return <div>Loading...</div>;
     }
 
-    const pigeonExistsInUserData = userPigeons.includes(pigeon.uuid);
+    const localPigeons = getLocalStoragePigeons();
+    // TODO: Only check localPigeons if user is not logged in.
+    // I'm keeping it as is because otherwise a user may collect a pigeon, log in, and it won't appear to be collected.
+    const pigeonExistsInUserData = (userPigeons.includes(pigeon.uuid) || localPigeons?.some(localPigeon => localPigeon.uuid === pigeon.uuid));
 
     return (
         <div>
@@ -48,6 +54,10 @@ export function Pigeon({params}){
             {pigeonExistsInUserData && (
                 <p>{pigeon.description}</p>
             )}
+            {/* TODO: Upon log in/sign up, we should save local storage pigeons to the user's profile */}
+            {/* {pigeonExistsInUserData && !session && (
+                <p>You found this pigeon! Make sure to sign up or log in to keep your pigeon permanently.</p>
+            )} */}
             {!pigeonExistsInUserData && (
                 <p>Hmm, you haven't found this pigeon yet. Go exploring to catch it!</p>
             )}

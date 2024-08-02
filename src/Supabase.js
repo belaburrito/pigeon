@@ -160,11 +160,11 @@ export function getLocalStoragePigeons() {
     const pigeons = [];
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        console.log(key);
+        // console.log(key);
         if (key.toLowerCase().includes('pigeon')) {
-            console.log('found pigeon')
+            // console.log('found pigeon')
             const pigeon = JSON.parse(localStorage.getItem(key));
-            console.log(pigeon);
+            // console.log(pigeon);
             pigeons.push(pigeon);
             //localStorage.removeItem(key);
         }
@@ -172,42 +172,43 @@ export function getLocalStoragePigeons() {
     return pigeons;
 }
 
-export async function signUpNewUser(email, password) {
-    localPigeons = getLocalStoragePigeons() ? getLocalStoragePigeons() : null;
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        emailRedirectTo: '/',
-        data: {
-            pigeons: localPigeons
-        }
-      }
-    })
-    if (error) {
-        console.log('Error signing up: ', error);
-    } else {
-        console.log('Signed up successfully');
-        console.log(data);
-    }
-  }
+// TODO: Refactor this to work with Google oauth
+// export async function signUpNewUser(email, password) {
+//     localPigeons = getLocalStoragePigeons() ? getLocalStoragePigeons() : null;
+//     const { data, error } = await supabase.auth.signUp({
+//       email: email,
+//       password: password,
+//       options: {
+//         emailRedirectTo: '/',
+//         data: {
+//             pigeons: localPigeons
+//         }
+//       }
+//     })
+//     if (error) {
+//         console.log('Error signing up: ', error);
+//     } else {
+//         console.log('Signed up successfully');
+//         console.log(data);
+//     }
+//   }
   
-export async function signInUser(email, password) {
-    localPigeons = getLocalStoragePigeons() ? getLocalStoragePigeons() : null;
-    console.log('local pigeons');
-    console.log(localPigeons);
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
-    })
-    if (error) {
-        console.log('Error signing in: ', error.message);
-    } else {
-        console.log('Signed in successfully');
-        updatePigeonsToProfile(data.user.id, localPigeons);
-        return data;
-    }
-}
+// export async function signInUser(email, password) {
+//     localPigeons = getLocalStoragePigeons() ? getLocalStoragePigeons() : null;
+//     console.log('local pigeons');
+//     console.log(localPigeons);
+//     const { data, error } = await supabase.auth.signInWithPassword({
+//         email: email,
+//         password: password
+//     })
+//     if (error) {
+//         console.log('Error signing in: ', error.message);
+//     } else {
+//         console.log('Signed in successfully');
+//         updatePigeonsToProfile(data.user.id, localPigeons);
+//         return data;
+//     }
+// }
 
 export async function signInGoogle() {
     const redirectUri = process.env.REDIRECT_URI || 'https://google.com';
@@ -217,7 +218,7 @@ export async function signInGoogle() {
         options: {
           redirectTo: redirectUri
         }
-      })      
+    })
 }
 
 export async function signOut() {

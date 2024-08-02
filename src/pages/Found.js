@@ -123,7 +123,7 @@ export const Found = ({ params }) => {
                 <div>
                     <h1>Success!</h1>
                     <p>You found <b>{foundPigeon.name}</b>!</p>
-                    <div class="pigeon"><img src={pigeonUrl} alt={foundPigeon.name} width="600" /></div>
+                    <div className="pigeon"><img src={pigeonUrl} alt={foundPigeon.name} width="600" /></div>
                     <p>Keep exploring to collect them all!</p>
                     {!session && <button onClick={() => setLocation('/signin')}>Sign in or Sign Up</button>}
                 </div>
