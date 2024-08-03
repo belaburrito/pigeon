@@ -226,6 +226,8 @@ export async function signOut() {
     const { error } = await supabase.auth.signOut()
     if (error) {
         console.log('Error signing out: ', error.message);
+        await supabase.auth._removeSession()
+        await supabase.auth._notifyAllSubscribers('SIGNED_OUT', null)
     } else {
         console.log('Signed out successfully');
     }
