@@ -115,8 +115,9 @@ textarea{
     opacity: 1;
 }
   
-.pigeons h1 {
+.pigeons p {
     text-align: center;
+    font-size: 72px;
 }
 
 .hidden {

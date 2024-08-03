@@ -97,9 +97,10 @@ export async function updatePigeonsToProfile(profileId, newPigeons) {
             .eq('id', profileId)
             .then(updateResponse => {
                 if (updateResponse.error) {
-                console.error('Error updating user data:', updateResponse.error);
+                    console.error('Error updating user data:', updateResponse.error);
                 } else {
-                console.log('User data updated successfully:', updateResponse.data);
+                    console.log('User data updated successfully:', updateResponse.data);
+                    localStorage.clear();
                 }
             });
         }
@@ -172,7 +173,6 @@ export function getLocalStoragePigeons() {
     return pigeons;
 }
 
-// TODO: Refactor this to work with Google oauth
 // export async function signUpNewUser(email, password) {
 //     localPigeons = getLocalStoragePigeons() ? getLocalStoragePigeons() : null;
 //     const { data, error } = await supabase.auth.signUp({
@@ -210,6 +210,7 @@ export function getLocalStoragePigeons() {
 //     }
 // }
 
+// TODO: Refactor this to call updatePigeonsToProfile after log in
 export async function signInGoogle() {
     const redirectUri = process.env.REDIRECT_URI || 'https://google.com';
     console.log(redirectUri)

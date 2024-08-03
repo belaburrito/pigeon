@@ -93,6 +93,7 @@ export function Pigeons() {
         const fetchUserPigeons = async () => {
             const data = await getPigeonsFromProfile();
             if (data[0] === null || data[0]?.pigeons === null) {
+                setLoaded(true);
                 return;
             }
             const uuids = data.flatMap(item => 
@@ -106,7 +107,7 @@ export function Pigeons() {
     return (
         <div className="pigeons">
             {session && (
-                <p className={`${loaded ? 'visible' : 'hidden'}`}><h1>You've collected {userPigeons.length} Pigeons out of 50.</h1></p>
+                <p className={`${loaded ? 'visible' : 'hidden'}`}>You've collected {userPigeons.length} Pigeons out of 50.</p>
             )}
             {/* { userPigeons.length === 0 && <StarterPigeon />} */}
             <div className="pigeon-container">
