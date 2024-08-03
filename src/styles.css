@@ -118,3 +118,76 @@ textarea{
 .pigeons h1 {
     text-align: center;
 }
+
+.hidden {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.visible {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+
+.starter-pigeon-container {
+    text-align: center;
+    margin-top: 50px;
+}
+  
+.glowing-text {
+    font-size: 42px;
+    color: black;
+    text-shadow: 
+        0 0 5px #fff, 
+        0 0 10px #fff, 
+        0 0 15px #d02525, 
+        0 0 20px #d02525, 
+        0 0 25px #d02525, 
+        0 0 30px #d02525, 
+        0 0 35px #d02525;
+    opacity: 0;
+    transition: opacity 2s;
+    animation: glow-pulse 1.5s infinite alternate;
+}
+
+.pigeon-image {
+    width: 600px;
+    height: auto;
+    margin-top: 40px;
+    opacity: 0;
+    transition: opacity 2s;
+    border: solid 2px white;
+    border-radius: 25px;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+/* Pulsing animation */
+@keyframes glow-pulse {
+0% {
+    text-shadow: 
+    0 0 5px #fff, 
+    0 0 10px #fff, 
+    0 0 15px #d02525, 
+    0 0 20px #d02525, 
+    0 0 25px #d02525, 
+    0 0 30px #d02525, 
+    0 0 35px #d02525;
+    transform: scale(1);
+}
+100% {
+    text-shadow: 
+    0 0 10px #fff, 
+    0 0 30px #d02525, 
+    0 0 40px #d02525, 
+    0 0 50px #d02525, 
+    0 0 60px #d02525, 
+    0 0 70px #d02525;
+    transform: scale(1.05);
+}
+}
+
+  

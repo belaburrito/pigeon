@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { PigeonContext } from  "../PigeonContext";
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect } from 'react';
 import { getPublicUrl, getPigeonsFromProfile, getLocalStoragePigeons } from "../Supabase";
 import { useState } from "react";
 import { useSession } from "../SessionContext";
@@ -47,10 +47,46 @@ export const PigeonCard = ({ pigeon, userPigeons }) => {
     );
 };
 
+export const StarterPigeon = () => {
+    const [, setLocation] = useLocation();
+    const navigateToPigeon = (id) => {
+        setLocation(`/pigeons/${id}`);
+    };
+    const [fadeIn, setFadeIn] = useState(false);
+
+    useEffect(() => {
+      // Trigger the fade-in effect after the component mounts
+      setFadeIn(true);
+    }, []);
+
+    return (
+        <div className="starter-pigeon-container">
+            <div className={`glowing-text ${fadeIn ? 'fade-in' : ''}`}>
+            Collect Your First Pigeon
+            </div>
+            <img 
+            src="https://zfuzqbjeufxqlsjsjlhu.supabase.co/storage/v1/object/public/pigeons/cards/Conspiracy%20Pigeon.png" 
+            alt="Conspiracy Pigeon" 
+            className={`pigeon-image ${fadeIn ? 'fade-in' : ''}`}
+            />
+      </div>
+        // <div className="pigeon">
+        //     <img
+        //         src="https://zfuzqbjeufxqlsjsjlhu.supabase.co/storage/v1/object/public/pigeons/cards/Conspiracy%20Pigeon.png"
+        //         alt="Conspiracy Pigeon"
+        //         width="600px"
+        //         // className={`fade-in ${loaded ? 'loaded' : ''}`}
+        //         // onLoad={handleImageLoad}
+        //     />
+        // </div>
+    );
+}
+
 // TODO: If !session and !localPigeons, or session and !userPigeons, show a section to collect a starter pigeon
 export function Pigeons() {
     const { pigeons } = useContext(PigeonContext);
     const [userPigeons, setUserPigeons] = useState([]);
+    const [loaded, setLoaded] = useState(false);
     const session = useSession();
     useEffect(() => {
         // Fetch user pigeon data once
@@ -63,24 +99,16 @@ export function Pigeons() {
                 item.pigeons.map(pigeon => pigeon.uuid)
             );
             setUserPigeons(uuids);
+            setLoaded(true);
         };
         fetchUserPigeons();
     }, []);
     return (
         <div className="pigeons">
             {session && (
-                <h1>You've collected {userPigeons.length} Pigeons out of 50.</h1>
+                <p className={`${loaded ? 'visible' : 'hidden'}`}><h1>You've collected {userPigeons.length} Pigeons out of 50.</h1></p>
             )}
-            {/* {userPigeons.length === 0 && (
-                <div>
-                    <p><a href="/found/879f0d83-2c4f-4a2c-955b-e6a17a344e3c">Click to collect your first Pigeon...</a></p>
-                            <img
-                                src="https://zfuzqbjeufxqlsjsjlhu.supabase.co/storage/v1/object/public/pigeons/cards/Conspiracy%20Pigeon.png"
-                                alt="Conspiracy Pigeon"
-                                width="600px"
-                            />
-                </div>
-            )} */}
+            {/* { userPigeons.length === 0 && <StarterPigeon />} */}
             <div className="pigeon-container">
                 {pigeons.map(pigeon => (
                     <PigeonCard key={pigeon.id} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
