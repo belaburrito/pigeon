@@ -37,7 +37,7 @@ export const PigeonCard = ({ pigeon, userPigeons }) => {
                     src={pigeonUrl}
                     alt={pigeon.name}
                     width="600px"
-                    className={`fade-in ${loaded ? 'loaded' : ''}`}
+                    className={`${loaded ? 'visible' : 'hidden'}`}
                     onLoad={handleImageLoad}
                 />
             ) : (
