@@ -9,7 +9,6 @@ export const PigeonProvider = ({ children }) => {
         const fetchData = async () => {
             const data = await GetPigeons();
             setPigeons(data);
-            console.log("bg getpigeons", data)
         };
         fetchData();
     }, []);

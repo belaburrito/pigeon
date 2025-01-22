@@ -54,8 +54,6 @@ function InsertPigeonForm() {
       paranoia,
       vogue,
     };
-
-    console.log(JSON.stringify(pigeonData));
     insertNewPigeon(pigeonData);
   };
 

@@ -2,7 +2,6 @@ import React from 'react';
 
 const Modal = ({ title, children, isOpen, onClose }) => {
     if (!isOpen) return null;
-    console.log("Modal opened");
 
     return (
         <div id="locationModal" className="modal">

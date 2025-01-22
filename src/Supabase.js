@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://zfuzqbjeufxqlsjsjlhu.supabase.co'
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmdXpxYmpldWZ4cWxzanNqbGh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTgzMTA5OTQsImV4cCI6MjAxMzg4Njk5NH0.geu5kkPss9uKgkp9OGRgKwZQKL-s7TfeLWnCIQZihtc"
+const supabaseUrl = 'https://fnenarmqopliegexivup.supabase.co'
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZW5hcm1xb3BsaWVnZXhpdnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMzYyNDQsImV4cCI6MjA1MjYxMjI0NH0.R40703-V1e714fvJrTbku2dvzUi6BUEhFunH66P18j8"
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 
@@ -10,7 +10,7 @@ export default supabase;
 export async function getSignedInProfile() {
     const { data, error } = await supabase
         .from('profiles')
-        .select('id, email, pigeons')
+        .select('id, email, pigeon_ids')
 
     if (error) {
         console.log('Error fetching profiles: ', error);
@@ -22,7 +22,7 @@ export async function getSignedInProfile() {
 export async function getPigeonsFromProfile() {
     const { data, error } = await supabase
         .from('profiles')
-        .select('pigeons')
+        .select('pigeon_ids')
 
     if (error) {
         console.log('Error fetching pigeons: ', error);
@@ -48,7 +48,6 @@ export async function isPigeonInProfile(pigeonUuid) {
 export async function getUser() {
     try {
         const { data: { user } } = await supabase.auth.getUser();
-        console.log(user);
         return user;
     } catch (error) {
         return null;
@@ -63,37 +62,33 @@ export async function GetPigeons() {
     if (error) {
         console.log('Error fetching pigeons: ', error);
     }
-    console.log(data);
 
     return data
 }
 
 export async function updatePigeonsToProfile(profileId, newPigeons) {
-    console.log('profileId', profileId);
     supabase
     .from('profiles')
-    .select('pigeons')
+    .select('pigeon_ids')
     .eq('id', profileId)
     .single()
     .then(response => {
       if (response.error) {
         console.error('Error fetching user data:', response.error);
       } else {
-        const currentPigeons = response.data.pigeons || [];
+        const currentPigeons = response.data.pigeon_ids || [];
         let combinedPigeons = currentPigeons.concat(newPigeons);
 
         // Remove duplicates based on a unique property, in this case 'id'
         let uniquePigeons = combinedPigeons.filter((value, index, self) =>
             index === self.findIndex((t) => (
-                t.id === value.id
+                t.uuid === value.uuid
             ))
         );
-
-        console.log(uniquePigeons);
         
         supabase
             .from('profiles')
-            .update({ pigeons: uniquePigeons })
+            .update({ pigeon_ids: uniquePigeons })
             .eq('id', profileId)
             .then(updateResponse => {
                 if (updateResponse.error) {
@@ -118,7 +113,6 @@ export async function insertNewPigeon(pigeon) {
 }
 
 export async function deletePigeon(id) {
-    console.log('deleting')
     const { data, error } = await supabase
         .from('pigeons')
         .delete()
@@ -213,7 +207,6 @@ export function getLocalStoragePigeons() {
 // TODO: Refactor this to call updatePigeonsToProfile after log in
 export async function signInGoogle() {
     const redirectUri = process.env.REDIRECT_URI || 'https://google.com';
-    console.log(redirectUri)
     supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -236,7 +229,7 @@ export async function signOut() {
 export async function getPublicUrl(path) {
     const { data } = await supabase
         .storage
-        .from('pigeons/cards')
+        .from('cards')
         .getPublicUrl(path)
     return data
 }

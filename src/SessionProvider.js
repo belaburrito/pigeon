@@ -25,7 +25,6 @@ export const SessionProvider = ({ children }) => {
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-            console.log("bg Session", session);
             setSession(session);
         });
 

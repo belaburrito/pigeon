@@ -71,28 +71,22 @@ export const Found = ({ params }) => {
         }
     };
     const foundPigeon = pigeons.find(pigeon => pigeon.uuid.toString() === pigeonId);
-    console.log(foundPigeon)
 
     useEffect(() => {
         if(userLocation && foundPigeon) {
-            console.log(userLocation.lat);
-            console.log(userLocation.lng);
             setLoading(true);
             VerifyLocation(userLocation.lat, userLocation.lng).then(res => {
                 // || (res && res[0].name !== foundPigeon.name)
                 // Above condition is to ensure that the coordinate matches the found pigeon, and not just any pigeon
-                if (!res || (res && res[0]?.name !== foundPigeon.name)) {
+                if (!res) {
                     setLocation('/toofar');
                 } else {
-                    console.log('Location verified!');
-                    console.log('Found pigeon:', JSON.stringify(foundPigeon));
                     localStorage.setItem(foundPigeon.name, JSON.stringify(foundPigeon));
                     setSuccess(true);
                     setShowPigeon(true);
                     if (session) {
-                        console.log('logged in');
                         getSignedInProfile().then((profile) => {
-                            updatePigeonsToProfile(profile[0].id, [foundPigeon]);
+                            updatePigeonsToProfile(profile[0].id, [foundPigeon.uuid]);
                         });
                     }
                 }

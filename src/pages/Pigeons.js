@@ -23,7 +23,7 @@ export const PigeonCard = ({ pigeon, userPigeons }) => {
     }, [pigeon.uuid, pigeon.name, userPigeons]);
 
     const navigateToPigeon = () => {
-        setLocation(`/pigeons/${pigeon.id}`);
+        setLocation(`/pigeons/${pigeon.uuid}`);
     };
 
     const handleImageLoad = () => {
@@ -92,14 +92,15 @@ export function Pigeons() {
         // Fetch user pigeon data once
         const fetchUserPigeons = async () => {
             const data = await getPigeonsFromProfile();
-            if (data[0] === null || data[0]?.pigeons === null) {
+            if (data.length === 0 || data[0]?.pigeon_ids.length === 0) {
                 setLoaded(true);
                 return;
             }
-            const uuids = data.flatMap(item => 
-                item.pigeons.map(pigeon => pigeon.uuid)
-            );
-            setUserPigeons(uuids);
+            console.log(data);
+            // const uuids = data.flatMap(item => 
+            //     item.pigeons.map(pigeon => pigeon.uuid)
+            // );
+            setUserPigeons(data[0].pigeon_ids);
             setLoaded(true);
         };
         fetchUserPigeons();
@@ -112,7 +113,7 @@ export function Pigeons() {
             {/* { userPigeons.length === 0 && <StarterPigeon />} */}
             <div className="pigeon-container">
                 {pigeons.map(pigeon => (
-                    <PigeonCard key={pigeon.id} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
+                    <PigeonCard key={pigeon.uuid} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
                 ))}
 
             </div>

@@ -8,6 +8,7 @@ export const Nav = () => {
     const [, setLocation] = useLocation();
     const session = useSession();
     const handleSignInGoogle = () => {
+        // TODO: update pigeons to profile and then clear local storage
         response = signInGoogle().then((response) => {
             console.log(response);
         });
@@ -17,14 +18,13 @@ export const Nav = () => {
             setLocation('/#');
         });
     };
-
     return (
             <div className="nav-container">
                 <nav>
                     <Link href="/">Home</Link>
                     <Link href="/pigeons">Pigeons</Link>
 
-                {session && session.user.role === 'admin_user' && (
+                {session && session?.user?.app_metadata?.role === 'admin_user' && (
                     <Link href="/admin">Admin</Link>
                 )}
             
@@ -42,7 +42,7 @@ export const Nav = () => {
                 <Route path="/signup" component={SignUp} />
                 <Route path="/signin" component={handleSignInGoogle} />
                 <Route path="/signout" component={handleSignOut} />
-                {session && session.user.role === 'admin_user' && (
+                {session && session?.user?.app_metadata?.role === 'admin_user' && (
                     <Route path="/admin" component={Admin} />
                 )}
             </div>
