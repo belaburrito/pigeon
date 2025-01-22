@@ -44,7 +44,6 @@ export function Pigeon({params}){
     }
 
     const localPigeons = getLocalStoragePigeons();
-    console.log("local pigeons", localPigeons)
     // TODO: Only check localPigeons if user is not logged in.
     // I'm keeping it as is because otherwise a user may collect a pigeon, log in, and it won't appear to be collected.
     const pigeonExistsInUserData = (userPigeons?.includes(pigeon.uuid) || localPigeons?.some(localPigeon => localPigeon.uuid === pigeon.uuid));

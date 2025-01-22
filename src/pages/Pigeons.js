@@ -96,10 +96,6 @@ export function Pigeons() {
                 setLoaded(true);
                 return;
             }
-            console.log(data);
-            // const uuids = data.flatMap(item => 
-            //     item.pigeons.map(pigeon => pigeon.uuid)
-            // );
             setUserPigeons(data[0].pigeon_ids);
             setLoaded(true);
         };
