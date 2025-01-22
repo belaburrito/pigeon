@@ -1,23 +1,34 @@
-import React from 'react';
 import {useSession} from './SessionContext';
+import { useEffect } from "react";
 import { Home, Admin, Pigeons, Pigeon, Found, TooFar, SignUp } from './pages';
 import { Route, Link, useLocation } from 'wouter';
 import { signInGoogle, signOut } from './Supabase';
 
-export const Nav = () => {
-    const [, setLocation] = useLocation();
-    const session = useSession();
-    const handleSignInGoogle = () => {
-        // TODO: update pigeons to profile and then clear local storage
-        response = signInGoogle().then((response) => {
+const SignInPage = () => {
+    useEffect(() => {
+        signInGoogle().then((response) => {
             console.log(response);
         });
-    };
-    const handleSignOut = () => {
-        response = signOut().then(() => {
+    }, []);
+    return <div>Signing in...</div>;
+};
+
+const SignOutPage = () => {
+    const [, setLocation] = useLocation();
+    
+    useEffect(() => {
+        const doSignOut = async () => {
+            await signOut();
             setLocation('/');
-        });
-    };
+        };
+        doSignOut();
+    }, [setLocation]);
+    
+    return <div>Signing out...</div>;
+};
+
+export const Nav = () => {
+    const session = useSession();
     return (
             <div className="nav-container">
                 <nav>
@@ -40,8 +51,8 @@ export const Nav = () => {
                 <Route path="/found/:id" component={Found} />
                 <Route path="/toofar" component={TooFar} />
                 <Route path="/signup" component={SignUp} />
-                <Route path="/signin" component={handleSignInGoogle} />
-                <Route path="/signout" component={handleSignOut} />
+                <Route path="/signin" component={SignInPage} />
+                <Route path="/signout" component={SignOutPage} />
                 {session && session?.user?.app_metadata?.role === 'admin_user' && (
                     <Route path="/admin" component={Admin} />
                 )}
