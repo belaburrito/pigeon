@@ -8,7 +8,7 @@ export function Home() {
     const [location] = useLocation();
     const DESC1 = "FOR THE FIRST TIME EVER simulate the intricate social webs of Pigeon East London (East Pigeon London). Every game another pigeon day in the eternal struggle for the next pigeon day, in this satirical and true-to-life card game."
     const DESC2 = "50 REAL PIGEONS, each vital to their community and cause, are fighting the ideological battle of their little bitty pigeon century. Ranked on essentialising categories from Audacity to Cunning to Punctuality in Trump Card style, the game of Pigeon skewers modern tropes and archetypes"
-    const DESC3 = "Explore your city to find the pigeons and collect them all! Pigeons can be collected by scanning their QR code in their unique, secret locations. Pigeons are currently only available in Barcelona, Spain."
+    const DESC3 = "Explore your city to find the pigeons and collect them all! Pigeons can be collected by scanning their QR code in their unique, secret locations. Pigeons are currently only available in New York, NY."
     useEffect(() => {
         setRandomPigeonId(Math.floor(Math.random() * 3) + 1);
     }, [location]);
