@@ -1,5 +1,5 @@
 # Pigeon
-https://pigeon-phi.vercel.app/
+https://pigeon-hi.vercel.app/
 
 ## About
 Hosted on Supabase
