@@ -89,7 +89,12 @@ export async function updatePigeonsToProfile(profileId, newPigeons) {
                     console.error('Error updating user data:', updateResponse.error);
                 } else {
                     console.log('User data updated successfully:', updateResponse.data);
-                    localStorage.clear();
+                    // Clear pigeons from localStorage
+                    Object.keys(localStorage).forEach(key => {
+                        if (key.toLowerCase().includes('pigeon')) {
+                            localStorage.removeItem(key);
+                        }
+                    });
                 }
             });
         }
