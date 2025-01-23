@@ -35,7 +35,7 @@ export async function getPigeonsFromProfile() {
 export async function isPigeonInProfile(pigeonUuid) {
     const { data, error } = await supabase
         .from('profiles')
-        .select('pigeons')
+        .select('pigeon_ids')
         .or(`pigeons -> '[{"uuid": "${pigeonUuid}"}]'::jsonb`);
 
     if (error) {
@@ -78,14 +78,8 @@ export async function updatePigeonsToProfile(profileId, newPigeons) {
       } else {
         const currentPigeons = response.data.pigeon_ids || [];
         let combinedPigeons = currentPigeons.concat(newPigeons);
-
-        // Remove duplicates based on a unique property, in this case 'id'
-        let uniquePigeons = combinedPigeons.filter((value, index, self) =>
-            index === self.findIndex((t) => (
-                t.uuid === value.uuid
-            ))
-        );
-        
+        // Remove duplicates
+        let uniquePigeons = [...new Set(combinedPigeons)]
         supabase
             .from('profiles')
             .update({ pigeon_ids: uniquePigeons })
@@ -221,11 +215,9 @@ export async function signOut() {
         console.log('Error signing out: ', error.message);
         await supabase.auth._removeSession()
         await supabase.auth._notifyAllSubscribers('SIGNED_OUT', null)
-        return error;
     } else {
         console.log('Signed out successfully');
     }
-    return;
 }
 
 export async function getPublicUrl(path) {
