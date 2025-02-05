@@ -1,5 +1,6 @@
-import { insertNewPigeon, deletePigeon } from "../Supabase";
-import React, { useState } from 'react';
+import { insertNewPigeon, deletePigeon, updatePigeonLocation } from "../Supabase";
+import React, { useState, useEffect, useContext } from 'react';
+import { PigeonContext } from  "../PigeonContext";
 
 function DeletePigeonForm() {
     const [id, setId] = useState('');
@@ -180,17 +181,109 @@ function InsertPigeonForm() {
   );
 }
 
+function UpdatePigeonForm() {
+  const [name, setName] = useState('');
+  const [lat, setLat] = useState('');
+  const [long, setLong] = useState('');
+  const location = `POINT(${long} ${lat})`;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updatePigeonLocation(name, location);
+  };
+  const [userLocation, setUserLocation] = useState(null);
+
+  const getUserLocation = async () => {
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+    }
+  
+    try {
+        const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+        //The user has previously blocked location access and needs to manually unblock it
+        if (permissionStatus.state === 'denied') {
+            console.log('DENIED')
+        }
+  
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+  
+        setUserLocation({
+            lat: Number(position.coords.latitude.toFixed(6)),
+            lng: Number(position.coords.longitude.toFixed(6)),
+        });
+        setLat(Number(position.coords.latitude.toFixed(6)));
+        setLong(Number(position.coords.longitude.toFixed(6)));
+    } catch (error) {
+        console.error('Error getting user location', error);
+        //Open modal?
+    }
+  };
+
+  useEffect(() => {
+    getUserLocation();
+  }, [userLocation]);
+
+  
+  const { pigeons } = useContext(PigeonContext);
+  return (
+      <form onSubmit={handleSubmit}>
+      <div>
+          <label>
+          Name:
+          <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              list="pigeon-names"
+          />
+          </label>
+          <datalist id="pigeon-names">
+            {pigeons.map((pigeon) => (
+              <option key={pigeon.uuid} value={pigeon.name} />
+            ))}
+          </datalist>
+      </div>
+      <div>
+          <label>
+          Longitude:
+          <input
+              type="text"
+              onChange={(e) => setLong(e.target.value)}
+              value={long || ''}
+          />
+          </label>
+      </div>
+      <div>
+          <label>
+          Latitude:
+          <input
+              type="text"
+              onChange={(e) => setLat(e.target.value)}
+              value={lat || ''}
+          />
+          </label>
+      </div>
+      <button type="submit">Submit</button>
+      </form>
+  );
+}
+
 export function Admin() {
     
     return (
         <div>
             <h1>Admin</h1>
             <div>
-                <h2>Insert new pigeon</h2>
+                {/* <h2>Insert new pigeon</h2>
                 <InsertPigeonForm />
 
                 <h2>Delete pigeon</h2>
-                <DeletePigeonForm />
+                <DeletePigeonForm /> */}
+
+                <h2>Update pigeon location</h2>
+                <UpdatePigeonForm />
             </div>
         </div>
         

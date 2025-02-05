@@ -62,7 +62,6 @@ export async function GetPigeons() {
     if (error) {
         console.log('Error fetching pigeons: ', error);
     }
-
     return data
 }
 
@@ -121,6 +120,17 @@ export async function deletePigeon(id) {
         console.log('Error deleting pigeon: ', error);
     }
 
+}
+export async function updatePigeonLocation(name, location) {
+    console.log(location);
+    const { data, error } = await supabase
+        .rpc('append_pigeon_location', {
+            p_name: name,
+            p_location: `SRID=4326;${location}`
+        });
+
+    console.log('Response:', data, error);
+    return { data, error };
 }
 
 export async function VerifyLocation(lat, long) {

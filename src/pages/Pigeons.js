@@ -14,16 +14,16 @@ export const PigeonCard = ({ pigeon, userPigeons }) => {
     // I'm keeping it as is because otherwise a user may collect a pigeon, log in, and it won't appear to be collected.
     useEffect(() => {
         const fetchPigeonUrl = async () => {
-            if (userPigeons.includes(pigeon.uuid) || localPigeons.some(localPigeon => localPigeon.uuid === pigeon.uuid)) {   
+            if (userPigeons.includes(pigeon.id) || localPigeons.some(localPigeon => localPigeon.id === pigeon.id)) {   
                 const url = await getPublicUrl(pigeon.name + ".png");
                 setPigeonUrl(url.publicUrl);
             }
         };
         fetchPigeonUrl();
-    }, [pigeon.uuid, pigeon.name, userPigeons]);
+    }, [pigeon.id, pigeon.name, userPigeons]);
 
     const navigateToPigeon = () => {
-        setLocation(`/pigeons/${pigeon.uuid}`);
+        setLocation(`/pigeons/${pigeon.id}`);
     };
 
     const handleImageLoad = () => {
@@ -109,7 +109,7 @@ export function Pigeons() {
             {/* { userPigeons.length === 0 && <StarterPigeon />} */}
             <div className="pigeon-container">
                 {pigeons.map(pigeon => (
-                    <PigeonCard key={pigeon.uuid} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
+                    <PigeonCard key={pigeon.id} pigeon={pigeon} userPigeons={userPigeons} name={pigeon.name} />
                 ))}
 
             </div>

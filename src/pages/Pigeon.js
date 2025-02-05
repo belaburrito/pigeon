@@ -10,7 +10,7 @@ export function Pigeon({params}){
     const { pigeons } = useContext(PigeonContext);
     const [pigeon, setPigeon] = useState(null);
     useEffect(() => {
-        const foundPigeon = pigeons.find(p => p.uuid.toString() === params.id);
+        const foundPigeon = pigeons.find(p => p.id.toString() === params.id);
         setPigeon(foundPigeon);
         async function fetchCoordinates() {
             const data = await getCoordinates(foundPigeon.location);
@@ -46,7 +46,7 @@ export function Pigeon({params}){
     const localPigeons = getLocalStoragePigeons();
     // TODO: Only check localPigeons if user is not logged in.
     // I'm keeping it as is because otherwise a user may collect a pigeon, log in, and it won't appear to be collected.
-    const pigeonExistsInUserData = (userPigeons?.includes(pigeon.uuid) || localPigeons?.some(localPigeon => localPigeon.uuid === pigeon.uuid));
+    const pigeonExistsInUserData = (userPigeons?.includes(pigeon.id) || localPigeons?.some(localPigeon => localPigeon.id === pigeon.id));
 
     return (
         <div>
