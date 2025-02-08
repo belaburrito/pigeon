@@ -48,7 +48,7 @@ export const Nav = () => {
                 <Route path="/" component={Home} />
                 <Route path="/pigeons" component={Pigeons} />
                 <Route path="/pigeons/:id" component={Pigeon} />
-                <Route path="/found/:id" component={Found} />
+                <Route path="/found/:uuid" component={Found} />
                 <Route path="/toofar" component={TooFar} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/signin" component={SignInPage} />

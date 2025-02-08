@@ -8,7 +8,7 @@ import {SessionContext} from '../SessionContext';
 
 export const Found = ({ params }) => {
     const { pigeons } = useContext(PigeonContext);
-    const pigeonId = params.id;
+    const pigeonUUID = params.uuid;
     const pigeonName = params.name;
 
     const [userLocation, setUserLocation] = useState(null);
@@ -70,8 +70,7 @@ export const Found = ({ params }) => {
             setLoading(false);
         }
     };
-    const foundPigeon = pigeons.find(pigeon => pigeon.id.toString() === pigeonId);
-
+    const foundPigeon = pigeons.find(pigeon => pigeon.uuid.toString() === pigeonUUID);
     useEffect(() => {
         if(userLocation && foundPigeon) {
             setLoading(true);

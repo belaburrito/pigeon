@@ -185,6 +185,9 @@ function UpdatePigeonForm() {
   const [name, setName] = useState('');
   const [lat, setLat] = useState('');
   const [long, setLong] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { pigeons } = useContext(PigeonContext);
   const location = `POINT(${long} ${lat})`;
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -195,6 +198,7 @@ function UpdatePigeonForm() {
   const getUserLocation = async () => {
     if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser.");
+        setIsLoading(false);
         return;
     }
   
@@ -203,6 +207,8 @@ function UpdatePigeonForm() {
         //The user has previously blocked location access and needs to manually unblock it
         if (permissionStatus.state === 'denied') {
             console.log('DENIED')
+            setIsLoading(false);
+            return;
         }
   
         const position = await new Promise((resolve, reject) => {
@@ -218,15 +224,20 @@ function UpdatePigeonForm() {
     } catch (error) {
         console.error('Error getting user location', error);
         //Open modal?
+    } finally {
+        setIsLoading(false);
     }
   };
 
   useEffect(() => {
     getUserLocation();
-  }, [userLocation]);
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading location...</div>
+  }
 
   
-  const { pigeons } = useContext(PigeonContext);
   return (
       <form onSubmit={handleSubmit}>
       <div>
